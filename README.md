@@ -1,5 +1,7 @@
 # Agentic SWE Training
 
+> I will update this project base on my actual hands-on experience.
+
 Teaching and demonstration repository for learning how to work effectively with agentic AI systems like Claude Code.
 
 ## Purpose
@@ -12,7 +14,7 @@ This repository serves as a sandbox and reference for peer software engineers le
 .
 ├── guides/           # How-to guides and workflows
 ├── examples/         # Utility scripts and code examples
-├── expense-tracker/  # Demo Laravel application
+├── calculator/       # Demo Laravel application
 └── README.md         # This file
 ```
 
