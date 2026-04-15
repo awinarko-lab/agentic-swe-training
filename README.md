@@ -35,6 +35,10 @@ This repository serves as a sandbox and reference for peer software engineers le
 
 - [Git Worktrees and Claude Code](guides/01-git-worktree-and-claude-code.md)
 
+## Example Repo
+
+- https://github.com/awinarko-lab/laravel-calculator
+
 ## Concepts Covered
 
 - Agentic AI workflows
