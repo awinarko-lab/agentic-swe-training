@@ -9,16 +9,16 @@
 Follow this path from top to bottom. Each module builds on the previous one.
 
 ```
-Module 0          Module 1          Module 2               Module 3               Module 4
-Setup &           Git Worktree      Claude Code            Cursor AI              Cross-Tool
-Guardrails        Setup              (from CLI)             (from Editor)          Patterns &
-──────────        ──────────        ──────────             ─────────               ────────
-Privacy,          Isolated          Sub-Agents,            Agents Window,         Workflow
-Security,         Workspaces         Agent Teams,           Cloud Agents,          &
-Conventions                         Skills, Hooks,         .cursorrules,          Safety
-                                    MCP                    MCP
-     │                │                      │                      │                      │
-     ▼                ▼                      ▼                      ▼                      ▼
+Module 0          Module 1          Module 2               Module 2b              Module 3               Module 4
+Setup &           Git Worktree      Claude Code            OpenCode               Cursor AI              Cross-Tool
+Guardrails        Setup              (from CLI)             (from CLI)             (from Editor)          Patterns &
+──────────        ──────────        ──────────             ──────────             ─────────               ────────
+Privacy,          Isolated          Sub-Agents,            Budget-Friendly        Agents Window,         Workflow
+Security,         Workspaces         Agent Teams,           Alternative to         Cloud Agents,          &
+Conventions                         Skills, Hooks,         Claude Code            MCP                    Safety
+                                    MCP
+     │                │                      │                     │                      │                      │
+     ▼                ▼                      ▼                     ▼                      ▼                      ▼
 ```
 
 ### Module 0: Project Setup & Guardrails
@@ -57,6 +57,20 @@ Master Claude Code — Anthropic's agentic coding platform that started as a CLI
 - Skills (auto-invocable & manual slash commands)
 - Hooks for deterministic enforcement
 - MCP for external tool integration
+
+### Module 2b: OpenCode *(coming soon)*
+
+Master OpenCode — an open-source, budget-friendly alternative to Claude Code with a similar CLI-based agentic workflow.
+
+> **Why OpenCode?** Claude Code is powerful but famously pricey. OpenCode provides a similar CLI agent experience (multi-file editing, git integration, MCP support) at a fraction of the cost — and it's open-source. If you've completed Module 2, the concepts transfer directly.
+
+- How OpenCode maps to Claude Code concepts (CLAUDE.md → config, Skills → commands, Hooks → lifecycle events)
+- Multi-provider support: Claude, Gemini, OpenAI, local models
+- Workflow patterns: same isolation, guardrails, and verification strategies from Module 1 & 2
+- When to use OpenCode vs Claude Code
+- Tips for teams on a budget
+
+> **Recommended path:** Complete Module 2 first, then use this guide as a "translation layer" — you already know the concepts, here you learn the syntax.
 
 ### Module 3: Cursor AI *(coming soon)*
 
