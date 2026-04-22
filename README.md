@@ -21,7 +21,7 @@ Conventions                         for AI Tasks
 ```
 
 ### Module 0: Project Setup & Guardrails
-**[→ Read the guide](guides/id/00-project-setup-and-guardrails.md)**
+**[🇬🇧 English](guides/en/00-project-setup-and-guardrails.md)** · **[🇮🇩 Bahasa Indonesia](guides/id/00-project-setup-and-guardrails.md)**
 
 **⚠️ Start here.** Before using any AI assistant on your project, set up guardrails for privacy, security, code conventions, and testing.
 
@@ -32,7 +32,7 @@ Conventions                         for AI Tasks
 - 3-layer permission model: instructions → config → OS-level
 
 ### Module 1: Git Worktree Setup
-**[→ Read the guide](guides/id/01-git-worktree-and-claude-code.md)**
+**[🇬🇧 English](guides/en/01-git-worktree-and-claude-code.md)** · **[🇮🇩 Bahasa Indonesia](guides/id/01-git-worktree-and-claude-code.md)**
 
 Learn how to create isolated workspaces so you and AI assistants can work on different tasks simultaneously without conflicts.
 
@@ -44,7 +44,7 @@ Learn how to create isolated workspaces so you and AI assistants can work on dif
 > Applies to both Claude Code and Cursor AI.
 
 ### Module 2: Claude Code — Agent in Terminal
-**[→ Read the guide](guides/id/02-claude-code-plugins-guide.md)**
+**[🇬🇧 English](guides/en/02-claude-code-plugins-guide.md)** · **[🇮🇩 Bahasa Indonesia](guides/id/02-claude-code-plugins-guide.md)**
 
 Master Claude Code — Anthropic's agentic coding assistant that lives in your terminal.
 
