@@ -10,10 +10,10 @@ Follow this path from top to bottom. Each module builds on the previous one.
 
 ```
 Module 1          Module 2               Module 3               Module 4
-Fundamentals      Claude Code            Cursor AI              Advanced
+Fundamentals      Claude Code            Cursor AI              Cross-Tool
 ──────────        ──────────             ─────────               ────────
-Git Worktree      Core Concepts          Core Concepts          Cross-Tool
-Setup             & Extensions           & Extensions           Patterns
+Git Worktree      Agent in Terminal      Agent Orchestrator     Patterns &
+Setup                                    (from Editor)          Workflow
      │                │                      │                      │
      ▼                ▼                      ▼                      ▼
 ```
@@ -30,10 +30,10 @@ Learn how to create isolated workspaces so you and AI assistants can work on dif
 
 > Applies to both Claude Code and Cursor AI.
 
-### Module 2: Claude Code
+### Module 2: Claude Code — Agent in Terminal
 **[→ Read the guide](guides/id/02-claude-code-plugins-guide.md)**
 
-Master Claude Code — Anthropic's agentic CLI coding assistant.
+Master Claude Code — Anthropic's agentic coding assistant that lives in your terminal.
 
 - Core concepts: prompts, CLAUDE.md, context management
 - Sub-Agents for parallel isolated tasks
@@ -42,16 +42,18 @@ Master Claude Code — Anthropic's agentic CLI coding assistant.
 - Hooks for deterministic enforcement
 - MCP for external tool integration
 
-### Module 3: Cursor AI *(coming soon)*
+### Module 3: Cursor AI — Agent Orchestrator *(coming soon)*
 
-Master Cursor AI — AI-first code editor built on VS Code.
+Master Cursor AI — evolved from AI-powered editor into a full agent orchestrator.
 
-- Core concepts: Composer, Chat, inline edits
-- `.cursorrules` and project configuration
-- Rules for codebase (`.cursor/rules/`)
+> **Note:** As of Cursor 3 (April 2026), Cursor's primary interface is the **Agents Window** — a parallel agent orchestration view. Developers spend more time managing agents than editing code directly. This module focuses on the agent-first workflow.
+
+- Agents Window: run and monitor multiple agents in parallel
+- Cloud Agents: offload long tasks to the cloud, pick up from web or mobile
+- Cursor CLI: agent modes in the terminal with cloud handoff
+- `.cursorrules` and `.cursor/rules/` for project configuration
 - MCP integration in Cursor
-- Multi-file editing with Composer
-- When to use Cursor vs Claude Code
+- When to use the editor view vs the agents view
 
 ### Module 4: Cross-Tool Patterns *(coming soon)*
 
@@ -59,9 +61,26 @@ Patterns that apply regardless of which tool you use.
 
 - Writing effective prompts and task descriptions
 - Reviewing and verifying AI-generated code
-- When to use CLI (Claude Code) vs IDE (Cursor) vs both
+- Choosing the right tool: terminal (Claude Code) vs orchestrator (Cursor) vs both
 - Building a personal AI-assisted workflow
 - Safety: what to automate, what to verify
+
+---
+
+## 💡 Two Tools, One Philosophy
+
+Both Claude Code and Cursor AI share the same goal: **you orchestrate, agents execute**.
+
+| | Claude Code | Cursor AI |
+|---|---|---|
+| **Interface** | Terminal / CLI | Agents Window + Editor |
+| **Strength** | Lightweight, scriptable, CI/CD friendly | Visual, parallel agents, cloud offload |
+| **Best for** | Quick tasks, automation, headless workflows | Multi-file features, long-running tasks, visual monitoring |
+| **Agent model** | Sub-agents, Agent Teams | Parallel agents, Cloud Agents |
+| **Config** | `CLAUDE.md`, Skills, Hooks | `.cursorrules`, `.cursor/rules/` |
+| **Extensibility** | MCP, Plugins | MCP, Marketplace |
+
+You don't have to pick one — most teams use both depending on the task.
 
 ---
 
@@ -74,7 +93,7 @@ Before starting, make sure you have these foundations:
 | Skill | Why it matters |
 |-------|---------------|
 | **Git basics** — commit, branch, merge, rebase, diff | Every guide assumes git fluency. AI assistants work within git workflows. |
-| **Command line** — navigate directories, run scripts, edit files | Claude Code is a CLI tool. Cursor runs in terminal too. |
+| **Command line** — navigate directories, run scripts, edit files | Claude Code is a CLI tool. Cursor also has a CLI mode. |
 | **Your primary language** — read/write code confidently | AI assists you, not replaces you. You must understand the code it generates. |
 
 ### Recommended
@@ -95,7 +114,7 @@ Before starting, make sure you have these foundations:
 | Tool | What it does | Install |
 |------|-------------|---------|
 | [Claude Code](https://claude.ai/claude-code) | Agentic coding assistant (CLI) | `npm install -g @anthropic-ai/claude-code` |
-| [Cursor](https://cursor.com) | AI-first code editor (IDE) | https://cursor.com |
+| [Cursor](https://cursor.com) | Agent orchestrator + AI code editor | https://cursor.com |
 
 ### Supporting Tools (referenced in guides)
 
@@ -103,7 +122,7 @@ Before starting, make sure you have these foundations:
 |------|---------|----------|
 | **Git** | All modules | Version control, worktrees, branching |
 | **GitHub CLI (`gh`)** | Module 2 & 3 | PR creation, issue management from terminal |
-| **Node.js / npm** | Module 2 (MCP) | MCP servers, Claude Code plugins |
+| **Node.js / npm** | Module 2 & 3 | MCP servers, plugins |
 | **jq** | Module 2 (Hooks) | Parsing JSON in shell scripts |
 | **Docker** | Module 1 (optional) | Isolated databases per worktree |
 | **PostgreSQL client** (`psql`, `createdb`) | Module 1 (optional) | Database isolation for worktrees |
@@ -122,7 +141,7 @@ npm install -g gh
 sudo apt install -y postgresql-client docker.io
 ```
 
-> Cursor is installed via its website — it bundles everything you need for the IDE experience.
+> Cursor is installed via its website — it bundles everything you need for the IDE/agent experience.
 
 ---
 
