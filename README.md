@@ -145,22 +145,6 @@ sudo apt install -y postgresql-client docker.io
 
 ---
 
-## 📁 Repository Structure
-
-```
-.
-├── guides/
-│   └── id/                              # Bahasa Indonesia guides
-│       ├── 01-git-worktree-and-claude-code.md
-│       └── 02-claude-code-plugins-guide.md
-├── .claude/
-│   └── agents/
-│       └── commit-message-writer.md     # Example sub-agent
-└── README.md                            # You are here
-```
-
----
-
 ## 📝 How to Use This Repo
 
 1. **Clone it** and read through the learning map above
