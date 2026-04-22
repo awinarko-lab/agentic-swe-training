@@ -11,11 +11,12 @@ Follow this path from top to bottom. Each module builds on the previous one.
 ```
 Module 0          Module 1          Module 2               Module 3               Module 4
 Setup &           Git Worktree      Claude Code            Cursor AI              Cross-Tool
-Guardrails        Setup              Agent in               Agent Orchestrator     Patterns &
+Guardrails        Setup              (from CLI)             (from Editor)          Patterns &
 ──────────        ──────────        ──────────             ─────────               ────────
-Privacy,          Isolated          Terminal               (from Editor)          Workflow
-Security,         Workspaces                               & Cloud
-Conventions                         for AI Tasks
+Privacy,          Isolated          Sub-Agents,            Agents Window,         Workflow
+Security,         Workspaces         Agent Teams,           Cloud Agents,          &
+Conventions                         Skills, Hooks,         .cursorrules,          Safety
+                                    MCP                    MCP
      │                │                      │                      │                      │
      ▼                ▼                      ▼                      ▼                      ▼
 ```
@@ -43,21 +44,21 @@ Learn how to create isolated workspaces so you and AI assistants can work on dif
 
 > Applies to both Claude Code and Cursor AI.
 
-### Module 2: Claude Code — Agent in Terminal
+### Module 2: Claude Code
 **[🇬🇧 English](guides/en/02-claude-code-plugins-guide.md)** · **[🇮🇩 Bahasa Indonesia](guides/id/02-claude-code-plugins-guide.md)**
 
-Master Claude Code — Anthropic's agentic coding assistant that lives in your terminal.
+Master Claude Code — Anthropic's agentic coding platform that started as a CLI tool and evolved into a full multi-agent system.
 
 - Core concepts: prompts, CLAUDE.md, context management
 - Sub-Agents for parallel isolated tasks
-- Agent Teams for multi-agent coordination
+- Agent Teams for multi-agent coordination (Feb 2026)
 - Skills (auto-invocable & manual slash commands)
 - Hooks for deterministic enforcement
 - MCP for external tool integration
 
-### Module 3: Cursor AI — Agent Orchestrator *(coming soon)*
+### Module 3: Cursor AI *(coming soon)*
 
-Master Cursor AI — evolved from AI-powered editor into a full agent orchestrator.
+Master Cursor AI — an AI-powered editor that evolved into a full multi-agent platform.
 
 > **Note:** As of Cursor 3 (April 2026), Cursor's primary interface is the **Agents Window** — a parallel agent orchestration view. Developers spend more time managing agents than editing code directly. This module focuses on the agent-first workflow.
 
@@ -74,22 +75,30 @@ Patterns that apply regardless of which tool you use.
 
 - Writing effective prompts and task descriptions
 - Reviewing and verifying AI-generated code
-- Choosing the right tool: terminal (Claude Code) vs orchestrator (Cursor) vs both
+- Choosing the right tool: CLI (Claude Code) vs editor (Cursor) vs both
 - Building a personal AI-assisted workflow
 - Safety: what to automate, what to verify
 
 ---
 
-## 💡 Two Tools, One Philosophy
+## 💡 Two Tools, Same Direction
 
-Both Claude Code and Cursor AI share the same goal: **you orchestrate, agents execute**.
+Claude Code and Cursor AI started from different places but arrived at the same destination: **multi-agent coding platforms** where you orchestrate, agents execute.
+
+```
+Claude Code:  CLI tool → sub-agents → agent teams → multi-agent platform
+Cursor AI:    Editor  → agent mode  → agents window → multi-agent platform
+```
+
+Both support parallel agents, MCP, rules/config, and hooks. The difference is the interface:
 
 | | Claude Code | Cursor AI |
 |---|---|---|
-| **Interface** | Terminal / CLI | Agents Window + Editor |
+| **Started as** | CLI tool | VS Code fork (editor) |
+| **Interface** | Terminal (tmux panels) | Visual dashboard + Editor |
 | **Strength** | Lightweight, scriptable, CI/CD friendly | Visual, parallel agents, cloud offload |
 | **Best for** | Quick tasks, automation, headless workflows | Multi-file features, long-running tasks, visual monitoring |
-| **Agent model** | Sub-agents, Agent Teams | Parallel agents, Cloud Agents |
+| **Multi-agent** | Sub-agents, Agent Teams | Agents Window, Cloud Agents |
 | **Config** | `CLAUDE.md`, Skills, Hooks | `.cursorrules`, `.cursor/rules/` |
 | **Extensibility** | MCP, Plugins | MCP, Marketplace |
 
@@ -126,8 +135,8 @@ Before starting, make sure you have these foundations:
 
 | Tool | What it does | Install |
 |------|-------------|---------|
-| [Claude Code](https://claude.ai/claude-code) | Agentic coding assistant (CLI) | `npm install -g @anthropic-ai/claude-code` |
-| [Cursor](https://cursor.com) | Agent orchestrator + AI code editor | https://cursor.com |
+| [Claude Code](https://claude.ai/claude-code) | Agentic coding platform (CLI) | `npm install -g @anthropic-ai/claude-code` |
+| [Cursor](https://cursor.com) | Agentic coding platform (Editor) | https://cursor.com |
 
 ### Supporting Tools (referenced in guides)
 
@@ -154,7 +163,7 @@ npm install -g gh
 sudo apt install -y postgresql-client docker.io
 ```
 
-> Cursor is installed via its website — it bundles everything you need for the IDE/agent experience.
+> Cursor is installed via its website — it bundles everything you need for the editor/agent experience.
 
 ---
 
