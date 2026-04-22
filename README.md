@@ -1,6 +1,6 @@
 # Agentic SWE Training
 
-> Practical training material for software engineers learning to work effectively with agentic AI systems like Claude Code. Built from real hands-on experience.
+> Practical training material for software engineers learning to work effectively with agentic AI coding assistants. Covers **Claude Code** and **Cursor AI**. Built from real hands-on experience.
 
 ---
 
@@ -9,44 +9,59 @@
 Follow this path from top to bottom. Each module builds on the previous one.
 
 ```
-Module 1          Module 2              Module 3
-Fundamentals      Environment           Advanced
-──────────        ──────────            ────────
-Git Worktree     Claude Code           Plugins &
-Setup            Basics                Extensions
-     │                │                    │
-     ▼                ▼                    ▼
+Module 1          Module 2               Module 3               Module 4
+Fundamentals      Claude Code            Cursor AI              Advanced
+──────────        ──────────             ─────────               ────────
+Git Worktree      Core Concepts          Core Concepts          Cross-Tool
+Setup             & Extensions           & Extensions           Patterns
+     │                │                      │                      │
+     ▼                ▼                      ▼                      ▼
 ```
 
 ### Module 1: Git Worktree Setup
 **[→ Read the guide](guides/id/01-git-worktree-and-claude-code.md)**
 
-Learn how to create isolated workspaces so you and Claude Code can work on different tasks simultaneously without conflicts.
+Learn how to create isolated workspaces so you and AI assistants can work on different tasks simultaneously without conflicts.
 
 - What git worktrees are and why they matter for agentic workflows
-- Setting up worktrees for Claude Code tasks
+- Setting up worktrees for AI-assisted tasks
 - Handling `.env`, database sharing, and dependency issues
 - Helper scripts for daily workflow
 
-### Module 2: Claude Code Basics *(coming soon)*
+> Applies to both Claude Code and Cursor AI.
 
-Core concepts for working with Claude Code effectively.
-
-- How to write good prompts and task descriptions
-- CLAUDE.md as project constitution
-- Reading and reviewing Claude's output
-- When to trust, when to verify
-
-### Module 3: Plugins & Extensions
+### Module 2: Claude Code
 **[→ Read the guide](guides/id/02-claude-code-plugins-guide.md)**
 
-Level up with Claude Code's extension system — sub-agents, skills, hooks, MCP, and plugins.
+Master Claude Code — Anthropic's agentic CLI coding assistant.
 
+- Core concepts: prompts, CLAUDE.md, context management
 - Sub-Agents for parallel isolated tasks
 - Agent Teams for multi-agent coordination
 - Skills (auto-invocable & manual slash commands)
 - Hooks for deterministic enforcement
 - MCP for external tool integration
+
+### Module 3: Cursor AI *(coming soon)*
+
+Master Cursor AI — AI-first code editor built on VS Code.
+
+- Core concepts: Composer, Chat, inline edits
+- `.cursorrules` and project configuration
+- Rules for codebase (`.cursor/rules/`)
+- MCP integration in Cursor
+- Multi-file editing with Composer
+- When to use Cursor vs Claude Code
+
+### Module 4: Cross-Tool Patterns *(coming soon)*
+
+Patterns that apply regardless of which tool you use.
+
+- Writing effective prompts and task descriptions
+- Reviewing and verifying AI-generated code
+- When to use CLI (Claude Code) vs IDE (Cursor) vs both
+- Building a personal AI-assisted workflow
+- Safety: what to automate, what to verify
 
 ---
 
@@ -58,36 +73,38 @@ Before starting, make sure you have these foundations:
 
 | Skill | Why it matters |
 |-------|---------------|
-| **Git basics** — commit, branch, merge, rebase, diff | Every guide assumes git fluency. Claude Code works within git workflows. |
-| **Command line** — navigate directories, run scripts, edit files | Claude Code is a CLI tool. You need to be comfortable in the terminal. |
-| **Your primary language** — read/write code confidently | Claude assists you, not replaces you. You must understand the code it generates. |
+| **Git basics** — commit, branch, merge, rebase, diff | Every guide assumes git fluency. AI assistants work within git workflows. |
+| **Command line** — navigate directories, run scripts, edit files | Claude Code is a CLI tool. Cursor runs in terminal too. |
+| **Your primary language** — read/write code confidently | AI assists you, not replaces you. You must understand the code it generates. |
 
 ### Recommended
 
 | Skill | Why it matters |
 |-------|---------------|
-| **Code review** — reading diffs, spotting issues | You'll be reviewing Claude's output constantly. |
+| **Code review** — reading diffs, spotting issues | You'll be reviewing AI output constantly. |
 | **Testing** — writing and running tests | "Trust but verify" — tests are your safety net. |
+| **VS Code basics** | Cursor is built on VS Code. Familiarity helps. |
 | **Project you work on daily** | Apply these techniques on a real codebase, not just tutorials. |
 
 ---
 
 ## 🛠️ Tools You'll Use
 
-### Core Tool
+### Core Tools
 
 | Tool | What it does | Install |
 |------|-------------|---------|
 | [Claude Code](https://claude.ai/claude-code) | Agentic coding assistant (CLI) | `npm install -g @anthropic-ai/claude-code` |
+| [Cursor](https://cursor.com) | AI-first code editor (IDE) | https://cursor.com |
 
 ### Supporting Tools (referenced in guides)
 
 | Tool | Used in | What for |
 |------|---------|----------|
 | **Git** | All modules | Version control, worktrees, branching |
-| **GitHub CLI (`gh`)** | Module 3 | PR creation, issue management from terminal |
-| **Node.js / npm** | Module 3 | MCP servers, some Claude Code plugins |
-| **jq** | Module 3 (Hooks) | Parsing JSON in shell scripts |
+| **GitHub CLI (`gh`)** | Module 2 & 3 | PR creation, issue management from terminal |
+| **Node.js / npm** | Module 2 (MCP) | MCP servers, Claude Code plugins |
+| **jq** | Module 2 (Hooks) | Parsing JSON in shell scripts |
 | **Docker** | Module 1 (optional) | Isolated databases per worktree |
 | **PostgreSQL client** (`psql`, `createdb`) | Module 1 (optional) | Database isolation for worktrees |
 
@@ -104,6 +121,8 @@ npm install -g gh
 # Optional
 sudo apt install -y postgresql-client docker.io
 ```
+
+> Cursor is installed via its website — it bundles everything you need for the IDE experience.
 
 ---
 
@@ -127,7 +146,7 @@ sudo apt install -y postgresql-client docker.io
 
 1. **Clone it** and read through the learning map above
 2. **Check prerequisites** — don't skip fundamentals
-3. **Install tools** — at minimum Claude Code and Git
+3. **Install tools** — start with one (Claude Code or Cursor), add the other later
 4. **Follow modules in order** — each builds on the last
 5. **Practice on your real project** — this is a training repo, not a sandbox
 
