@@ -187,3 +187,21 @@ This is a living training resource. If you discover a useful workflow, hit a pit
 ---
 
 *Built from real experience. Updated as we learn.*
+
+---
+
+## 🔍 Other AI Coding Tools (Further Research)
+
+This repo focuses on **Claude Code** and **Cursor AI** as the core tools, but the ecosystem is growing fast. These tools share similar concepts (agents, worktrees, MCP, rules/config) — the patterns you learn here transfer.
+
+| Tool | Type | Description |
+|------|------|-------------|
+| [GitHub Copilot](https://github.com/features/copilot) | Editor extension (VS Code, JetBrains, Neovim) | The most widely adopted AI coding assistant. Now supports agent mode, multi-file editing, and Copilot Workspaces. Integrates natively with GitHub PRs and issues. |
+| [OpenCode](https://github.com/opencode-ai/opencode) | CLI agent (open-source) | Terminal-based coding agent. Supports Claude, Gemini, and other LLMs as backends. Good alternative if you want an open, self-hostable CLI agent. |
+| [Kilo Code](https://kilocode.ai) | CLI agent | AI coding agent with multi-file editing and agentic workflows. Lightweight terminal-first approach. |
+| [Aider](https://github.com/paul-gauthier/aider) | CLI agent (open-source) | Pair-programming AI that works with your git repo. Supports Claude, GPT-4, and local models. Strong at multi-file refactoring with automatic commits. |
+| [Cline](https://github.com/cline/cline) | VS Code extension (open-source) | Autonomous coding agent for VS Code. Creates files, runs commands, and uses the browser — all from a chat interface. |
+| [Windsurf](https://codeium.com/windsurf) | IDE (editor) | AI-native IDE by Codeium with "Cascade" — a multi-step agent that plans, executes, and iterates. Built-in terminal integration. |
+| [Amazon Q Developer](https://aws.amazon.com/q/developer/) | CLI + IDE extension | AWS-integrated coding agent. Strong for AWS services, but also handles general coding tasks. Has `q` CLI for terminal workflows. |
+
+> **Tip:** Pick one core tool (Claude Code or Cursor) to learn deeply. The concepts — isolation, guardrails, agents, verification — apply to all of them. Come back to this list when you're ready to explore alternatives or understand what your teammates might be using.
