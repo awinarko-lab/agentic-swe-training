@@ -9,14 +9,27 @@
 Follow this path from top to bottom. Each module builds on the previous one.
 
 ```
-Module 1          Module 2               Module 3               Module 4
-Fundamentals      Claude Code            Cursor AI              Cross-Tool
-──────────        ──────────             ─────────               ────────
-Git Worktree      Agent in Terminal      Agent Orchestrator     Patterns &
-Setup                                    (from Editor)          Workflow
-     │                │                      │                      │
-     ▼                ▼                      ▼                      ▼
+Module 0          Module 1          Module 2               Module 3               Module 4
+Setup &           Git Worktree      Claude Code            Cursor AI              Cross-Tool
+Guardrails        Setup              Agent in               Agent Orchestrator     Patterns &
+──────────        ──────────        ──────────             ─────────               ────────
+Privacy,          Isolated          Terminal               (from Editor)          Workflow
+Security,         Workspaces                               & Cloud
+Conventions                         for AI Tasks
+     │                │                      │                      │                      │
+     ▼                ▼                      ▼                      ▼                      ▼
 ```
+
+### Module 0: Project Setup & Guardrails
+**[→ Read the guide](guides/id/00-project-setup-and-guardrails.md)**
+
+**⚠️ Start here.** Before using any AI assistant on your project, set up guardrails for privacy, security, code conventions, and testing.
+
+- Why AI can read your secrets (`.gitignore` won't save you)
+- Ignore files: `.claudeignore`, `.cursorignore`
+- Writing `CLAUDE.md` and `.cursorrules` — your project's constitution
+- Testing guardrails: pre-commit hooks, CI, plan mode
+- 3-layer permission model: instructions → config → OS-level
 
 ### Module 1: Git Worktree Setup
 **[→ Read the guide](guides/id/01-git-worktree-and-claude-code.md)**
@@ -148,10 +161,11 @@ sudo apt install -y postgresql-client docker.io
 ## 📝 How to Use This Repo
 
 1. **Clone it** and read through the learning map above
-2. **Check prerequisites** — don't skip fundamentals
-3. **Install tools** — start with one (Claude Code or Cursor), add the other later
-4. **Follow modules in order** — each builds on the last
-5. **Practice on your real project** — this is a training repo, not a sandbox
+2. **Start with Module 0** — set up guardrails before using AI on any project
+3. **Check prerequisites** — don't skip fundamentals
+4. **Install tools** — start with one (Claude Code or Cursor), add the other later
+5. **Follow modules in order** — each builds on the last
+6. **Practice on your real project** — this is a training repo, not a sandbox
 
 ---
 
