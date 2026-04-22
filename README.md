@@ -38,11 +38,13 @@ Conventions                         Skills, Hooks,         .cursorrules,        
 Learn how to create isolated workspaces so you and AI assistants can work on different tasks simultaneously without conflicts.
 
 - What git worktrees are and why they matter for agentic workflows
+- **Worktrees are the engine behind parallel agents** — both Claude Code and Cursor use them under the hood
 - Setting up worktrees for AI-assisted tasks
 - Handling `.env`, database sharing, and dependency issues
+- `WorktreeCreate` hooks for automatic setup when agents start
 - Helper scripts for daily workflow
 
-> Applies to both Claude Code and Cursor AI.
+> Applies to both Claude Code and Cursor AI. This is the foundation for all multi-agent workflows.
 
 ### Module 2: Claude Code
 **[🇬🇧 English](guides/en/02-claude-code-plugins-guide.md)** · **[🇮🇩 Bahasa Indonesia](guides/id/02-claude-code-plugins-guide.md)**

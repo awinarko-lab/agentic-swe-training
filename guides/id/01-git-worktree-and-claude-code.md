@@ -15,6 +15,7 @@
 5. [Workflow Harian](#5-workflow-harian)
 6. [Helper Scripts](#6-helper-scripts)
 7. [Tips Lanjutan](#7-tips-lanjutan)
+8. [Worktree: Mesin di Balik Parallel Agents](#8-worktree-mesin-di-balik-parallel-agents)
 
 ---
 
@@ -722,4 +723,161 @@ Jika hasilnya bagus, cherry-pick commit yang relevan. Jika tidak, hapus saja wor
 
 ---
 
-*Dengan setup ini, Bruce bisa menjalankan Claude Code secara paralel di beberapa worktree sekaligus, masing-masing dengan database dan environment yang terisolasi — tanpa khawatir pekerjaan satu worktree mengganggu yang lain.*
+## 8. Worktree: Mesin di Balik Parallel Agents
+
+Semua yang sudah kamu pelajari di panduan ini tentang worktree bukan sekadar "best practice" — **ini adalah mekanisme yang digunakan baik Claude Code maupun Cursor AI untuk menjalankan parallel agents**.
+
+Ketika kamu menjalankan beberapa agent secara bersamaan, mereka secara literal berjalan di git worktree terpisah di balik layar. Artinya setiap masalah yang sudah kita bahas di panduan ini (`.env` tidak tercopy, konflik database, tabrakan port) berlaku untuk setiap sesi parallel agent.
+
+### Bagaimana Claude Code Menggunakan Worktree
+
+Claude Code punya **dukungan worktree first-class** yang sudah built-in di tool:
+
+**Flag `-w`** — buat sesi terisolasi di worktree:
+
+```bash
+# Claude membuat worktree + branch secara otomatis
+claude -w fix-division-bug
+
+# Di balik layar, Claude menjalankan:
+# git worktree add .claude/worktrees/fix-division-bug -b worktree-fix-division-bug
+# → Sesi dimulai di dalam direktori worktree
+# → Agent bekerja dalam isolasi penuh
+# → Setelah selesai, merge seperti PR biasa
+```
+
+**Sub-agent dengan `isolation: worktree`** — di definisi custom agent (`.claude/agents/`):
+
+```markdown
+---
+name: feature-builder
+isolation: worktree
+---
+
+You are a feature builder. Work on the assigned task in your isolated worktree.
+```
+
+Setiap kali agent ini dijalankan, Claude otomatis membuat worktree baru. Beberapa agent yang berjalan paralel masing-masing mendapat worktree sendiri.
+
+**`/worktree` command** — manajemen worktree interaktif dari dalam Claude Code.
+
+**`/batch` command** — menjalankan beberapa agent terisolasi worktree secara paralel dengan satu prompt. Ini cara built-in untuk bilang "jalankan 3 task ini paralel."
+
+**Agent Teams** — ketika kamu menjalankan Claude Code Agent Teams, setiap sesi teammate mendapat worktree sendiri untuk isolasi file.
+
+**`WorktreeCreate` / `WorktreeRemove` hooks** — Claude Code punya hook event khusus untuk lifecycle worktree. Ini tepat untuk menyelesaikan masalah `.env` copy dan setup database secara otomatis:
+
+```json
+{
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./scripts/worktree-setup.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+```bash
+#!/bin/bash
+# scripts/worktree-setup.sh
+# Dijalankan setiap kali Claude membuat worktree baru
+
+WORKTREE_DIR=$1
+
+# Copy file .env
+for env_file in .env .env.local .env.test; do
+  [ -f "$env_file" ] && cp "$env_file" "$WORKTREE_DIR/$env_file"
+done
+
+# Buat database terisolasi
+DB_NAME="app_$(basename $WORKTREE_DIR | sed 's/[^a-z0-9]/_/g')"
+createdb "$DB_NAME" 2>/dev/null
+sed -i "s|DB_DATABASE=.*|DB_DATABASE=$DB_NAME|" "$WORKTREE_DIR/.env"
+
+# Install dependencies
+(cd "$WORKTREE_DIR" && npm install --silent 2>/dev/null)
+
+echo "$WORKTREE_DIR"
+```
+
+**Desktop app** — Claude Code Desktop otomatis mengisolasi setiap sesi baru di worktree sendiri.
+
+### Bagaimana Cursor AI Menggunakan Worktree
+
+**Parallel Agents** Cursor (Agents Window di Cursor 3) menggunakan mekanisme yang persis sama:
+
+```
+Kamu assign task ke beberapa agent di Agents Window:
+  Agent A: "Fix bug #12"
+  Agent B: "Tambah fitur reporting"
+  Agent C: "Refactor module auth"
+
+Di balik layar, Cursor menjalankan:
+  git worktree add ../agent-a -b feature/agent-a
+  git worktree add ../agent-b -b feature/agent-b
+  git worktree add ../agent-c -b feature/agent-c
+```
+
+Setiap agent bekerja di worktree sendiri di branch sendiri. Mereka tidak bisa menyentuh file agent lain. Setelah agent selesai, kamu review dan merge branch mereka seperti PR biasa.
+
+### Mengapa Ini Penting
+
+Memahami bahwa worktree menggerakkan parallel agents mengubah cara kamu memandang kedua tool:
+
+**1. Masalah dari Section 4 berlaku untuk setiap sesi agent.**
+
+Ketika Claude Code atau Cursor men-spawn parallel agent di worktree, worktree itu punya masalah yang sama seperti yang sudah kita bahas:
+- File `.env` tidak tercopy (gunakan `WorktreeCreate` hooks untuk memperbaikinya)
+- Database di-share secara default (konfigurasi database per-worktree)
+- Dependencies tidak terinstall (gunakan hooks atau setup scripts)
+- Port dev server konflik (assign port berbeda per worktree)
+
+**2. Kamu bisa mengontrol behavior agent melalui worktree hooks.**
+
+Hook `WorktreeCreate` Claude Code memungkinkan kamu menjalankan setup script setiap kali agent dimulai. Artinya kamu bisa:
+- Auto-copy file `.env`
+- Buat database terisolasi
+- Install dependencies
+- Setup environment sebelum agent mulai coding
+
+**3. Cleanup setelah agent sama dengan cleanup worktree.**
+
+```bash
+# Lihat semua worktree agent yang aktif
+git worktree list
+
+# Bersihkan worktree agent yang sudah selesai
+git worktree remove .claude/worktrees/fix-division-bug
+git branch -d worktree-fix-division-bug
+```
+
+**4. Flag `-w` membuat manual worktree setup jadi opsional.**
+
+Jika kamu menggunakan Claude Code, kamu tidak selalu butuh helper scripts dari Section 6. Flag `-w` dan `WorktreeCreate` hooks menangani sebagian besar setup secara otomatis. Tapi memahami apa yang terjadi di balik layar (panduan ini) membantu kamu debug ketika ada masalah.
+
+### Ringkasan: Worktree di Mana-mana
+
+```
+Kamu buat worktree manual       Claude Code flag -w       Cursor Parallel Agents
+          │                              │                            │
+          ▼                              ▼                            ▼
+  git worktree add <path>      git worktree add             git worktree add
+  -b <branch>                  .claude/worktrees/<name>     ../agent-<name>
+                               -b worktree-<name>          -b feature/agent-<name>
+          │                              │                            │
+          ▼                              ▼                            ▼
+  Masalah yang sama: .env tidak tercopy, DB di-share, deps hilang, port konflik
+          │                              │                            │
+          ▼                              ▼                            ▼
+  Solusi yang sama: setup scripts, hooks, database terisolasi
+```
+
+**Mekanisme yang sama, entry point berbeda.** Baik kamu buat worktree manual, biarkan Claude Code melakukannya dengan `-w`, atau biarkan Cursor menangani via Parallel Agents — semuanya git worktree di balik layar. Itulah kenapa module ini ada di urutan pertama: semua yang lain dibangun di atas fondasi ini.

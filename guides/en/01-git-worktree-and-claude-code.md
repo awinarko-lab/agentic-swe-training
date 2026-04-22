@@ -15,6 +15,7 @@
 5. [Daily Workflow](#5-daily-workflow)
 6. [Helper Scripts](#6-helper-scripts)
 7. [Advanced Tips](#7-advanced-tips)
+8. [Worktrees: The Engine Behind Parallel Agents](#8-worktrees-the-engine-behind-parallel-agents)
 
 ---
 
@@ -722,4 +723,161 @@ If the result is good, cherry-pick the relevant commits. If not, just delete the
 
 ---
 
-*With this setup, Bruce can run Claude Code in parallel across multiple worktrees, each with its own isolated database and environment — without worrying about one worktree's work interfering with another.*
+## 8. Worktrees: The Engine Behind Parallel Agents
+
+Everything you've learned in this guide about worktrees is not just "good practice" — **it is the mechanism that both Claude Code and Cursor AI use to run parallel agents**.
+
+When you run multiple agents at the same time, they are literally running in separate git worktrees behind the scene. This means every problem we covered in this guide (`.env` not copied, database conflicts, port collisions) applies to every parallel agent session.
+
+### How Claude Code Uses Worktrees
+
+Claude Code has **first-class worktree support** built directly into the tool:
+
+**`-w` flag** — create an isolated session in a worktree:
+
+```bash
+# Claude creates a worktree + branch automatically
+claude -w fix-division-bug
+
+# Behind the scene, Claude runs:
+# git worktree add .claude/worktrees/fix-division-bug -b worktree-fix-division-bug
+# → Session starts inside the worktree directory
+# → Agent works in full isolation
+# → When done, merge like a normal PR
+```
+
+**Sub-agents with `isolation: worktree`** — in custom agent definitions (`.claude/agents/`):
+
+```markdown
+---
+name: feature-builder
+isolation: worktree
+---
+
+You are a feature builder. Work on the assigned task in your isolated worktree.
+```
+
+Every time this agent runs, Claude automatically creates a fresh worktree. Multiple agents running in parallel each get their own.
+
+**`/worktree` command** — interactive worktree management from within Claude Code.
+
+**`/batch` command** — spins up multiple worktree-isolated agents in parallel with a single prompt. This is the built-in way to say "run these 3 tasks in parallel."
+
+**Agent Teams** — when you run Claude Code Agent Teams, each teammate session gets its own worktree for file isolation.
+
+**`WorktreeCreate` / `WorktreeRemove` hooks** — Claude Code has dedicated hook events for worktree lifecycle. This is exactly how you solve the `.env` copy and database setup problem automatically:
+
+```json
+{
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./scripts/worktree-setup.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+```bash
+#!/bin/bash
+# scripts/worktree-setup.sh
+# Runs every time Claude creates a new worktree
+
+WORKTREE_DIR=$1
+
+# Copy .env files
+for env_file in .env .env.local .env.test; do
+  [ -f "$env_file" ] && cp "$env_file" "$WORKTREE_DIR/$env_file"
+done
+
+# Create isolated database
+DB_NAME="app_$(basename $WORKTREE_DIR | sed 's/[^a-z0-9]/_/g')"
+createdb "$DB_NAME" 2>/dev/null
+sed -i "s|DB_DATABASE=.*|DB_DATABASE=$DB_NAME|" "$WORKTREE_DIR/.env"
+
+# Install dependencies
+(cd "$WORKTREE_DIR" && npm install --silent 2>/dev/null)
+
+echo "$WORKTREE_DIR"
+```
+
+**Desktop app** — Claude Code Desktop automatically isolates every new session in its own worktree.
+
+### How Cursor AI Uses Worktrees
+
+Cursor's **Parallel Agents** (Agents Window in Cursor 3) use the exact same mechanism:
+
+```
+You assign tasks to multiple agents in the Agents Window:
+  Agent A: "Fix bug #12"
+  Agent B: "Add reporting feature"
+  Agent C: "Refactor auth module"
+
+Behind the scene, Cursor runs:
+  git worktree add ../agent-a -b feature/agent-a
+  git worktree add ../agent-b -b feature/agent-b
+  git worktree add ../agent-c -b feature/agent-c
+```
+
+Each agent operates in its own worktree on its own branch. They can't touch each other's files. When agents finish, you review and merge their branches like normal PRs.
+
+### Why This Matters
+
+Understanding that worktrees power parallel agents changes how you think about both tools:
+
+**1. The problems from Section 4 apply to every agent session.**
+
+When Claude Code or Cursor spawns a parallel agent in a worktree, that worktree has the same problems we covered earlier:
+- `.env` files are not copied (use `WorktreeCreate` hooks to fix this)
+- Database is shared by default (configure per-worktree databases)
+- Dependencies are not installed (use hooks or setup scripts)
+- Dev server ports conflict (assign different ports per worktree)
+
+**2. You can control agent behavior through worktree hooks.**
+
+Claude Code's `WorktreeCreate` hook lets you run setup scripts every time an agent starts. This means you can:
+- Auto-copy `.env` files
+- Create isolated databases
+- Install dependencies
+- Set up the environment before the agent even starts coding
+
+**3. Cleaning up after agents is the same as cleaning up worktrees.**
+
+```bash
+# List all active agent worktrees
+git worktree list
+
+# Clean up finished agent worktrees
+git worktree remove .claude/worktrees/fix-division-bug
+git branch -d worktree-fix-division-bug
+```
+
+**4. The `-w` flag makes manual worktree setup optional.**
+
+If you're using Claude Code, you don't always need the helper scripts from Section 6. The `-w` flag and `WorktreeCreate` hooks handle most of the setup automatically. But understanding what happens behind the scene (this guide) helps you debug when things go wrong.
+
+### Summary: Worktrees Everywhere
+
+```
+You manually create a worktree     Claude Code -w flag       Cursor Parallel Agents
+          │                                │                              │
+          ▼                                ▼                              ▼
+  git worktree add <path>      git worktree add              git worktree add
+  -b <branch>                  .claude/worktrees/<name>      ../agent-<name>
+                               -b worktree-<name>           -b feature/agent-<name>
+          │                                │                              │
+          ▼                                ▼                              ▼
+  All the same problems: .env not copied, DB shared, deps missing, port conflicts
+          │                                │                              │
+          ▼                                ▼                              ▼
+  All the same solutions: setup scripts, hooks, isolated databases
+```
+
+**Same mechanism, different entry points.** Whether you create worktrees manually, let Claude Code do it with `-w`, or let Cursor handle it via Parallel Agents — it's all git worktrees under the hood. That's why this module comes first: everything else builds on this foundation.
